@@ -42,7 +42,7 @@ deploy:
     - docker run -d
       --name $IMAGE_NAME
       --network eventhub
-      -p 8001:80
+      -p 3001:3000
       $CI_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
   tags:
     - eventhub-administration-runner
