@@ -17,7 +17,7 @@ function App() {
 
       <Route path="/" element={<MainLayout />}>
         {/* Protected Routes */}
-        <Route element={<ProtectedLayout />}>
+        <Route path="/" element={<ProtectedLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/users" element={<Users />} />
           <Route path="/roles" element={<Roles />} />
