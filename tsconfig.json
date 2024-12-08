@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    // Basic Compiler Options
+    "target": "ES2022",              // Hỗ trợ các tính năng mới nhất của JavaScript
+    "module": "ESNext",               // Hỗ trợ module hiện đại
+    "lib": ["ES2022", "DOM", "DOM.Iterable"], // Thư viện hỗ trợ
+    "moduleResolution": "bundler",    // Phương thức resolve module hiện đại
+
+    // Paths & Base URL
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]              // Alias cho đường dẫn import
+    },
+
+    // Strict Checking
+    "strict": true,                   // Bật tất cả các kiểm tra nghiêm ngặt
+    "noUnusedLocals": true,           // Báo lỗi biến local không sử dụng
+    "noUnusedParameters": true,       // Báo lỗi parameter không sử dụng
+    "noFallthroughCasesInSwitch": true, // Ngăn chặn việc quên break trong switch
+
+    // React-specific Options
+    "jsx": "react-jsx",               // Hỗ trợ React JSX
+    "esModuleInterop": true,          // Tương thích module import
+    "skipLibCheck": true,             // Bỏ qua kiểm tra khai báo thư viện
+
+    // Source Map & Debugging
+    "sourceMap": true,                // Tạo source map để debug
+    "declaration": true,              // Tạo file .d.ts
+
+    // Optimization & Performance 
+    "isolatedModules": true,          // Kiểm tra mỗi file riêng biệt
+    "resolveJsonModule": true,        // Cho phép import JSON
+
+    // Vite-specific
+    "noEmit": true                    // Vite sẽ handle việc compile
+  },
+  
+  // Đường dẫn source code
+  "include": [
+    "src",
+    "vite.config.ts"
+  ],
+  
+  // Loại trừ các thư mục không cần compile
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build"
+  ]
+}
