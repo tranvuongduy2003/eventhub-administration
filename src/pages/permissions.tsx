@@ -1,3 +1,3 @@
-export default function Permissions() {
+export default function PermissionsPage() {
   return <div>Permissions</div>;
 }

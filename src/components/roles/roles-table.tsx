@@ -1,13 +1,7 @@
+import { DeleteRoleDialog } from "@/components/roles/delete-role-dialog";
+import { EditRoleDialog } from "@/components/roles/edit-role-dialog";
 import { Badge } from "@/components/ui/badge";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import { CustomPagination } from "@/components/ui/custom-pagination";
 import {
   Table,
   TableBody,
@@ -16,32 +10,26 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { usePagination } from "@/hooks/use-pagination";
 import { Role } from "@/types/role.type";
 import { format } from "date-fns";
-import { useState } from "react";
-import { DeleteRoleDialog } from "./delete-role-dialog";
-import { EditRoleDialog } from "./edit-role-dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 interface RolesTableProps {
   roles: Role[];
 }
 
 export function RolesTable({ roles }: RolesTableProps) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const totalPages = Math.ceil(roles.length / itemsPerPage);
-
-  const paginatedRoles = roles.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const {
+    currentPage,
+    setCurrentPage,
+    itemsPerPage,
+    setItemsPerPage,
+    paginatedItems: paginatedRoles,
+    totalPages,
+  } = usePagination({
+    items: roles,
+    initialItemsPerPage: 10,
+  });
 
   return (
     <div className="space-y-4">
@@ -82,115 +70,14 @@ export function RolesTable({ roles }: RolesTableProps) {
           </TableBody>
         </Table>
       </div>
-
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
-        {/* Display current page information */}
-        <p className="text-sm text-muted-foreground whitespace-nowrap">
-          Showing {(currentPage - 1) * itemsPerPage + 1} -{" "}
-          {Math.min(currentPage * itemsPerPage, roles.length)} of {roles.length}{" "}
-          items
-        </p>
-
-        {/* Pagination controls */}
-        <div className="flex-1 flex justify-center">
-          <Pagination>
-            <PaginationContent>
-              {/* Previous page button */}
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  className={`transition-all duration-200 ${
-                    currentPage === 1
-                      ? "pointer-events-none opacity-50"
-                      : "cursor-pointer hover:bg-muted"
-                  }`}
-                  aria-label="Go to previous page"
-                />
-              </PaginationItem>
-
-              {/* Render page numbers - simplified view for 7 or fewer pages */}
-              {totalPages <= 7 ? (
-                [...Array(totalPages)].map((_, i) => (
-                  <PaginationItem key={i + 1}>
-                    <PaginationLink
-                      onClick={() => setCurrentPage(i + 1)}
-                      isActive={currentPage === i + 1}
-                      className="transition-all duration-200"
-                    >
-                      {i + 1}
-                    </PaginationLink>
-                  </PaginationItem>
-                ))
-              ) : (
-                <>
-                  {/* First 3 pages */}
-                  {[...Array(3)].map((_, i) => (
-                    <PaginationItem key={i + 1}>
-                      <PaginationLink
-                        onClick={() => setCurrentPage(i + 1)}
-                        isActive={currentPage === i + 1}
-                        className="transition-all duration-200"
-                      >
-                        {i + 1}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
-                  {/* Ellipsis to indicate skipped pages */}
-                  <PaginationItem>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                  {/* Last 3 pages */}
-                  {[...Array(3)].map((_, i) => (
-                    <PaginationItem key={totalPages - 2 + i}>
-                      <PaginationLink
-                        onClick={() => setCurrentPage(totalPages - 2 + i)}
-                        isActive={currentPage === totalPages - 2 + i}
-                        className="transition-all duration-200"
-                      >
-                        {totalPages - 2 + i}
-                      </PaginationLink>
-                    </PaginationItem>
-                  ))}
-                </>
-              )}
-
-              {/* Next page button */}
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() =>
-                    setCurrentPage((p) => Math.min(totalPages, p + 1))
-                  }
-                  className={`transition-all duration-200 ${
-                    currentPage === totalPages
-                      ? "pointer-events-none opacity-50"
-                      : "cursor-pointer hover:bg-muted"
-                  }`}
-                  aria-label="Go to next page"
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
-
-        {/* Items per page selector */}
-        <Select
-          value={itemsPerPage.toString()}
-          onValueChange={(value) => {
-            setItemsPerPage(Number(value));
-            setCurrentPage(1);
-          }}
-        >
-          <SelectTrigger className="w-[140px]">
-            <SelectValue placeholder="Items per page" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="5">5 per page</SelectItem>
-            <SelectItem value="10">10 per page</SelectItem>
-            <SelectItem value="20">20 per page</SelectItem>
-            <SelectItem value="50">50 per page</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <CustomPagination
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        itemsPerPage={itemsPerPage}
+        setItemsPerPage={setItemsPerPage}
+        totalItems={roles.length}
+        totalPages={totalPages}
+      />
     </div>
   );
 }

@@ -56,7 +56,7 @@ const profileFormSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
-export default function Settings() {
+export default function SettingsPage() {
   const { profile, setProfile } = useAuthStore();
   const { toast } = useToast();
 

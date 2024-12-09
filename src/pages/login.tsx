@@ -19,7 +19,7 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-export default function Login() {
+export default function LoginPage() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const { setTokens, setProfile, isAuthenticated } = useAuthStore();

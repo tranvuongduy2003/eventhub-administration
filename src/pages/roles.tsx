@@ -1,9 +1,16 @@
 import { CreateRoleDialog } from "@/components/roles/create-role-dialog";
 import { RolesTable } from "@/components/roles/roles-table";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { SearchBar } from "@/components/ui/search-bar";
-import { useEffect, useState } from "react";
 import { Permission } from "@/types/permission.type";
 import { Role } from "@/types/role.type";
+import { useEffect, useState } from "react";
 
 const permissionsTree: Permission[] = [
   {
@@ -106,8 +113,6 @@ const mockRoles: Role[] = [
     name: "admin",
     displayName: "Administrator",
     description: "Full system access",
-    isStatic: true,
-    isDefault: false,
     creationTime: "2024-01-01T00:00:00Z",
     permissions: permissionsTree,
   },
@@ -116,8 +121,6 @@ const mockRoles: Role[] = [
     name: "user",
     displayName: "Standard User",
     description: "Basic user access",
-    isStatic: true,
-    isDefault: true,
     creationTime: "2024-01-01T00:00:00Z",
     permissions: [
       {
@@ -158,8 +161,6 @@ const mockRoles: Role[] = [
     name: "moderator",
     displayName: "Content Moderator",
     description: "Can moderate user content",
-    isStatic: false,
-    isDefault: false,
     creationTime: "2024-01-15T00:00:00Z",
     permissions: [
       {
@@ -193,8 +194,6 @@ const mockRoles: Role[] = [
     name: "analyst",
     displayName: "Data Analyst",
     description: "Access to analytics and reporting",
-    isStatic: false,
-    isDefault: false,
     creationTime: "2024-02-01T00:00:00Z",
     permissions: [
       {
@@ -230,7 +229,7 @@ const mockRoles: Role[] = [
   },
 ];
 
-export default function Roles() {
+export default function RolesPage() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -239,15 +238,19 @@ export default function Roles() {
   }, []);
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Roles</h1>
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-6">
+        <div>
+          <CardTitle className="text-2xl font-bold">Roles</CardTitle>
+          <CardDescription>Manage user roles and permissions</CardDescription>
+        </div>
         <CreateRoleDialog />
-      </div>
+      </CardHeader>
+      <CardContent>
+        <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
 
-      <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
-
-      <RolesTable roles={roles} />
-    </div>
+        <RolesTable roles={roles} />
+      </CardContent>
+    </Card>
   );
 }
