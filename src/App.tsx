@@ -9,7 +9,7 @@ import RolesPage from "@/pages/roles";
 import SecuritySettingsPage from "@/pages/security-settings";
 import SettingsPage from "@/pages/settings";
 import UsersPage from "@/pages/users";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
@@ -20,6 +20,7 @@ function App() {
       <Route path="/" element={<MainLayout />}>
         {/* Protected Routes */}
         <Route path="/" element={<ProtectedLayout />}>
+          <Route path="/" element={<Navigate to="/dashboard" />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/users" element={<UsersPage />} />
           <Route path="/roles" element={<RolesPage />} />

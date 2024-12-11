@@ -1,7 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Settings as SettingsIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,12 +16,24 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
-import { useAuthStore } from "@/store/auth";
-import userService from "@/services/user.service";
-import { UpdateUserDto } from "@/types/user.type";
+import { Textarea } from "@/components/ui/textarea";
 import { Gender } from "@/enums/gender.enum";
+import { useToast } from "@/hooks/use-toast";
 import { ApiError } from "@/lib/api-service";
+import userService from "@/services/user.service";
+import { useAuthStore } from "@/store/auth";
+import { UpdateUserDto } from "@/types/user.type";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Settings as SettingsIcon } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 const profileFormSchema = z.object({
   email: z
@@ -250,10 +258,10 @@ export default function SettingsPage() {
                   <FormItem>
                     <FormLabel>Bio</FormLabel>
                     <FormControl>
-                      <textarea
+                      <Textarea
                         {...field}
-                        className="w-full min-h-[100px] p-3 rounded-md border focus:ring-2 focus:ring-primary/20 focus:outline-none resize-y"
                         placeholder="Tell us a little about yourself..."
+                        className="min-h-[100px] resize-y focus:ring-2 focus:ring-primary/20"
                       />
                     </FormControl>
                     <FormMessage />
@@ -269,19 +277,22 @@ export default function SettingsPage() {
                     <FormItem>
                       <FormLabel>Gender</FormLabel>
                       <FormControl>
-                        <select
-                          {...field}
-                          className="w-full p-2 rounded-md border focus:ring-2 focus:ring-primary/20 focus:outline-none bg-background"
+                        <Select
                           value={field.value || ""}
+                          onValueChange={field.onChange}
                         >
-                          <option value="">Select gender</option>
-                          {Object.values(Gender).map((gender) => (
-                            <option key={gender} value={gender}>
-                              {gender.charAt(0).toUpperCase() +
-                                gender.slice(1).toLowerCase()}
-                            </option>
-                          ))}
-                        </select>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select gender" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {Object.values(Gender).map((gender) => (
+                              <SelectItem key={gender} value={gender}>
+                                {gender.charAt(0).toUpperCase() +
+                                  gender.slice(1).toLowerCase()}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

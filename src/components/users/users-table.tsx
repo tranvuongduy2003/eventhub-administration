@@ -14,6 +14,16 @@ import { UserStatus } from "@/enums/user-status.enum";
 import { usePagination } from "@/hooks/use-pagination";
 import { User } from "@/types/user.type";
 import { format } from "date-fns";
+import {
+  Activity,
+  AtSign,
+  Clock,
+  Mail,
+  Phone,
+  Settings,
+  Shield,
+  User as UserIcon,
+} from "lucide-react";
 
 interface UsersTableProps {
   users: User[];
@@ -34,18 +44,58 @@ export function UsersTable({ users }: UsersTableProps) {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-md border">
+      <div className="border rounded-md">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
-              <TableHead className="w-[150px]">Full Name</TableHead>
-              <TableHead className="w-[150px]">Email</TableHead>
-              <TableHead className="w-[150px]">Username</TableHead>
-              <TableHead className="w-[150px]">Phone Number</TableHead>
-              <TableHead className="w-[100px]">Status</TableHead>
-              <TableHead className="w-[150px]">Roles</TableHead>
-              <TableHead className="w-[150px]">Created At</TableHead>
-              <TableHead className="w-[100px] text-right">Actions</TableHead>
+              <TableHead className="w-[150px] font-semibold">
+                <div className="flex items-center gap-3">
+                  <UserIcon className="w-4 h-4" />
+                  Full Name
+                </div>
+              </TableHead>
+              <TableHead className="w-[150px] font-semibold">
+                <div className="flex items-center gap-3">
+                  <Mail className="w-4 h-4" />
+                  Email
+                </div>
+              </TableHead>
+              <TableHead className="w-[150px] font-semibold">
+                <div className="flex items-center gap-3">
+                  <AtSign className="w-4 h-4" />
+                  Username
+                </div>
+              </TableHead>
+              <TableHead className="w-[150px] font-semibold">
+                <div className="flex items-center gap-3">
+                  <Phone className="w-4 h-4" />
+                  Phone Number
+                </div>
+              </TableHead>
+              <TableHead className="w-[100px] font-semibold">
+                <div className="flex items-center gap-3">
+                  <Activity className="w-4 h-4" />
+                  Status
+                </div>
+              </TableHead>
+              <TableHead className="w-[150px] font-semibold">
+                <div className="flex items-center gap-3">
+                  <Shield className="w-4 h-4" />
+                  Roles
+                </div>
+              </TableHead>
+              <TableHead className="w-[150px] font-semibold">
+                <div className="flex items-center gap-3">
+                  <Clock className="w-4 h-4" />
+                  Created At
+                </div>
+              </TableHead>
+              <TableHead className="w-[100px] font-semibold text-right">
+                <div className="flex items-center justify-end gap-3">
+                  <Settings className="w-4 h-4" />
+                  Actions
+                </div>
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

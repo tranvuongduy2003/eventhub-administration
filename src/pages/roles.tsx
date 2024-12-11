@@ -1,5 +1,6 @@
 import { CreateRoleDialog } from "@/components/roles/create-role-dialog";
 import { RolesTable } from "@/components/roles/roles-table";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,9 +8,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { SearchBar } from "@/components/ui/search-bar";
+import { Input } from "@/components/ui/input";
 import { Permission } from "@/types/permission.type";
 import { Role } from "@/types/role.type";
+import { Search, SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const permissionsTree: Permission[] = [
@@ -239,7 +241,7 @@ export default function RolesPage() {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-6">
+      <CardHeader className="flex flex-row items-center justify-between pb-6 space-y-0">
         <div>
           <CardTitle className="text-2xl font-bold">Roles</CardTitle>
           <CardDescription>Manage user roles and permissions</CardDescription>
@@ -247,7 +249,21 @@ export default function RolesPage() {
         <CreateRoleDialog />
       </CardHeader>
       <CardContent>
-        <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+        <div className="flex items-center pb-4 space-x-2">
+          <div className="relative flex-1">
+            <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search users..."
+              className="pl-8"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <Button variant="outline">
+            <Search className="w-4 h-4 mr-2" />
+            Search
+          </Button>
+        </div>
 
         <RolesTable roles={roles} />
       </CardContent>

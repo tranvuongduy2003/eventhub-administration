@@ -13,6 +13,7 @@ import {
 import { usePagination } from "@/hooks/use-pagination";
 import { Role } from "@/types/role.type";
 import { format } from "date-fns";
+import { Clock, FileText, Settings, Tag, User } from "lucide-react";
 
 interface RolesTableProps {
   roles: Role[];
@@ -33,15 +34,40 @@ export function RolesTable({ roles }: RolesTableProps) {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-md border">
+      <div className="border rounded-md">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
-              <TableHead className="w-[150px]">Role Name</TableHead>
-              <TableHead className="w-[150px]">Display Name</TableHead>
-              <TableHead className="w-[300px]">Description</TableHead>
-              <TableHead className="w-[150px]">Creation Time</TableHead>
-              <TableHead className="w-[100px] text-right">Actions</TableHead>
+              <TableHead className="w-[150px] font-semibold">
+                <div className="flex items-center gap-3">
+                  <User className="w-4 h-4" />
+                  Role Name
+                </div>
+              </TableHead>
+              <TableHead className="w-[150px] font-semibold">
+                <div className="flex items-center gap-3">
+                  <Tag className="w-4 h-4" />
+                  Display Name
+                </div>
+              </TableHead>
+              <TableHead className="w-[300px] font-semibold">
+                <div className="flex items-center gap-3">
+                  <FileText className="w-4 h-4" />
+                  Description
+                </div>
+              </TableHead>
+              <TableHead className="w-[150px] font-semibold">
+                <div className="flex items-center gap-3">
+                  <Clock className="w-4 h-4" />
+                  Creation Time
+                </div>
+              </TableHead>
+              <TableHead className="w-[100px] text-right font-semibold">
+                <div className="flex items-center justify-end gap-3">
+                  <Settings className="w-4 h-4" />
+                  Actions
+                </div>
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

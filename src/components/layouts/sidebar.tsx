@@ -33,10 +33,10 @@ const Sidebar = () => {
   );
 
   return (
-    <div className="relative min-h-screen w-full border-r bg-background p-6 pt-0">
-      <div className="flex h-16 items-center justify-between">
+    <div className="relative w-full min-h-screen p-6 pt-0 border-r bg-background">
+      <div className="flex items-center justify-between h-16">
         <div className="flex items-center gap-2">
-          <img src="/eventhub-icon.png" alt="EventHub" className="h-8 w-8" />
+          <img src="/eventhub-icon.png" alt="EventHub" className="w-8 h-8" />
           <h2 className="text-lg font-semibold">EventHub</h2>
         </div>
       </div>
@@ -49,7 +49,7 @@ const Sidebar = () => {
               isPathActive("/dashboard") && "bg-accent text-white"
             )}
           >
-            <LayoutDashboard className="h-4 w-4" />
+            <LayoutDashboard className="w-4 h-4" />
             Dashboard
           </Button>
         </Link>
@@ -60,7 +60,7 @@ const Sidebar = () => {
               variant="ghost"
               className={cn("w-full justify-start gap-2")}
             >
-              <Building2 className="h-4 w-4" />
+              <Building2 className="w-4 h-4" />
               Administration
               <ChevronDown className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" />
             </Button>
@@ -74,7 +74,7 @@ const Sidebar = () => {
                   isPathActive("/users") && "bg-accent text-white"
                 )}
               >
-                <Users className="h-4 w-4" />
+                <Users className="w-4 h-4" />
                 Users
               </Button>
             </Link>
@@ -86,7 +86,7 @@ const Sidebar = () => {
                   isPathActive("/roles") && "bg-accent text-white"
                 )}
               >
-                <UserCircle className="h-4 w-4" />
+                <UserCircle className="w-4 h-4" />
                 Roles
               </Button>
             </Link>
@@ -98,7 +98,7 @@ const Sidebar = () => {
                   isPathActive("/audit-logs") && "bg-accent text-white"
                 )}
               >
-                <ScrollText className="h-4 w-4" />
+                <ScrollText className="w-4 h-4" />
                 Audit Logs
               </Button>
             </Link>
@@ -107,8 +107,8 @@ const Sidebar = () => {
 
         <Collapsible defaultOpen={isSecuritySectionActive}>
           <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-start gap-2">
-              <Shield className="h-4 w-4" />
+            <Button variant="ghost" className="justify-start w-full gap-2">
+              <Shield className="w-4 h-4" />
               Security
               <ChevronDown className="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]:rotate-180" />
             </Button>
@@ -122,7 +122,7 @@ const Sidebar = () => {
                   isPathActive("/permissions") && "bg-accent text-white"
                 )}
               >
-                <LockIcon className="h-4 w-4" />
+                <LockIcon className="w-4 h-4" />
                 Permissions
               </Button>
             </Link>
@@ -134,7 +134,7 @@ const Sidebar = () => {
                   isPathActive("/security-settings") && "bg-accent text-white"
                 )}
               >
-                <Settings className="h-4 w-4" />
+                <Settings className="w-4 h-4" />
                 Settings
               </Button>
             </Link>
