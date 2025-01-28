@@ -65,7 +65,7 @@ pipeline {
         success {
             script {
                 // Safely escape variables and construct JSON
-                def jsonText = "[🔥SUCCESS][eventhub-fe] Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} success🔥🔥🔥! For more info: ${env.BUILD_URL}"
+                def jsonText = "[🔥SUCCESS][eventhub-administration] Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} success🔥🔥🔥! For more info: ${env.BUILD_URL}"
                 def payload = groovy.json.JsonOutput.toJson([
                     chat_id: "1934277483",
                     text: jsonText,
@@ -77,7 +77,7 @@ pipeline {
         }
         failure {
             script {
-                def jsonText = "[💀FAILED][eventhub-fe] Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} failed😭😭😭! For more info: ${env.BUILD_URL}"
+                def jsonText = "[💀FAILED][eventhub-administration] Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} failed😭😭😭! For more info: ${env.BUILD_URL}"
                 def payload = groovy.json.JsonOutput.toJson([
                     chat_id: "1934277483",
                     text: jsonText,
