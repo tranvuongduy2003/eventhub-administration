@@ -1,35 +1,34 @@
-# Use Node.js as base image for building
-FROM node:20-alpine as build
+# Stage 1: Build the application
+FROM node:20-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package.json ./
+# Install build tools
+RUN apk add --no-cache python3 make g++
 
-# Install dependencies
-RUN yarn
+# Set environment variables for architecture
+ENV npm_config_platform=linuxmusl
+ENV npm_config_arch=x64
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies with forced architecture
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY . .
 
-# Build the app
-RUN yarn build
+# Build the project
+RUN npm run build
 
-# Use Node.js for serving
-FROM node:20-alpine
+# Stage 2: Production image remains Alpine
+FROM nginx:alpine
 
-# Set working directory
-WORKDIR /app
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Install serve globally
-RUN yarn global add serve
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy built files from build stage
-COPY --from=build /app/dist ./dist
+EXPOSE 80
 
-# Expose port 3000
-EXPOSE 3000
-
-# Start server
-CMD ["serve", "-s", "dist", "-l", "3000"]
+CMD ["nginx", "-g", "daemon off;"]
