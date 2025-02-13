@@ -6,13 +6,13 @@ import { TableRow, TableCell } from "@/components/ui/table";
 import { EditPermissionDialog } from "@/components/permissions/edit-permission-dialog";
 import { AddSubPermissionDialog } from "@/components/permissions/add-sub-permission-dialog";
 import { DeletePermissionDialog } from "@/components/permissions/delete-permission-dialog";
-import { Permission } from "@/types/permission.type";
+import { FunctionType } from "@/types/function.type";
 
 export function PermissionRow({
   permission,
   level,
 }: {
-  permission: Permission;
+  permission: FunctionType;
   level: number;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);

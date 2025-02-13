@@ -1,9 +1,9 @@
-import { Permission } from "./permission.type";
+import { FunctionType } from "./function.type";
 
 export interface Role {
   id: string;
   name: string;
   description: string;
   createdAt: string;
-  permissions: Permission[];
+  permissions: FunctionType[];
 }

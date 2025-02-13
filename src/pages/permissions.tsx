@@ -1,5 +1,4 @@
 import { PermissionsTable } from "@/components/permissions/permissions-table";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,103 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Permission } from "@/types/permission.type";
-import { Search } from "lucide-react";
-import { useEffect, useState } from "react";
-
-const permissionsTree: Permission[] = [
-  {
-    id: "users",
-    name: "Users Management",
-    level: 1,
-    children: [
-      {
-        id: "users.create",
-        name: "Create Users",
-        level: 2,
-      },
-      {
-        id: "users.edit",
-        name: "Edit Users",
-        level: 2,
-        children: [
-          {
-            id: "users.edit.profile",
-            name: "Edit Profile",
-            level: 3,
-          },
-          {
-            id: "users.edit.roles",
-            name: "Manage User Roles",
-            level: 3,
-          },
-        ],
-      },
-      {
-        id: "users.delete",
-        name: "Delete Users",
-        level: 2,
-      },
-    ],
-  },
-  {
-    id: "roles",
-    name: "Roles Management",
-    level: 1,
-    children: [
-      {
-        id: "roles.create",
-        name: "Create Roles",
-        level: 2,
-      },
-      {
-        id: "roles.edit",
-        name: "Edit Roles",
-        level: 2,
-      },
-      {
-        id: "roles.delete",
-        name: "Delete Roles",
-        level: 2,
-      },
-    ],
-  },
-  {
-    id: "permissions",
-    name: "Permissions Management",
-    level: 1,
-    children: [
-      {
-        id: "permissions.assign",
-        name: "Assign Permissions",
-        level: 2,
-      },
-      {
-        id: "permissions.revoke",
-        name: "Revoke Permissions",
-        level: 2,
-      },
-    ],
-  },
-  {
-    id: "audit",
-    name: "Audit Logs",
-    level: 1,
-    children: [
-      {
-        id: "audit.view",
-        name: "View Logs",
-        level: 2,
-      },
-      {
-        id: "audit.export",
-        name: "Export Logs",
-        level: 2,
-      },
-    ],
-  },
-];
 
 export default function PermissionsPage() {
   return (

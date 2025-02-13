@@ -11,12 +11,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Permission } from "@/types/permission.type";
+import { FunctionType } from "@/types/function.type";
 
 export function DeletePermissionDialog({
   permission,
 }: {
-  permission: Permission;
+  permission: FunctionType;
 }) {
   return (
     <AlertDialog>

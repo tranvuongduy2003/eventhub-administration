@@ -12,12 +12,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Permission } from "@/types/permission.type";
+import { FunctionType } from "@/types/function.type";
 
 export function AddSubPermissionDialog({
   parentPermission,
 }: {
-  parentPermission: Permission;
+  parentPermission: FunctionType;
 }) {
   const [name, setName] = useState("");
   const [id, setId] = useState("");

@@ -18,7 +18,7 @@ interface IDeleteRoleDialogProps {
 }
 
 export function DeleteRoleDialog({ role }: IDeleteRoleDialogProps) {
-  const handleDelete = (roleId: number) => {
+  const handleDelete = (roleId: string) => {
     // Handle role deletion here
     console.log(`Deleting role ${roleId}`);
   };

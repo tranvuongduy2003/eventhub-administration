@@ -12,12 +12,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Permission } from "@/types/permission.type";
+import { FunctionType } from "@/types/function.type";
 
 export function EditPermissionDialog({
   permission,
 }: {
-  permission: Permission;
+  permission: FunctionType;
 }) {
   const [name, setName] = useState(permission.name);
   const [id, setId] = useState(permission.id);
