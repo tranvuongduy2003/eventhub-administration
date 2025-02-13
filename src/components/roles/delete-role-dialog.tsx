@@ -34,8 +34,8 @@ export function DeleteRoleDialog({ role }: IDeleteRoleDialogProps) {
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Role</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete the role "{role.displayName}"? This
-            action cannot be undone.
+            Are you sure you want to delete the role "{role.name}"? This action
+            cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

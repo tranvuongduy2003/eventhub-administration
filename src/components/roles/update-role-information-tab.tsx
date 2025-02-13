@@ -30,7 +30,7 @@ export function UpdateRoleInformationTab({
     resolver: zodResolver(updateRoleSchema),
     defaultValues: {
       name: selectedRole?.name || "",
-      displayName: selectedRole?.displayName || "",
+      displayName: selectedRole?.name || "",
       description: selectedRole?.description || "",
     },
   });

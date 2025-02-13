@@ -41,11 +41,20 @@ class UserService {
   }
 
   // Get paginated users
-  async getPaginatedUsers(
-    filter: Partial<PaginationFilter>
-  ): Promise<Pagination<User>> {
+  async getPaginatedUsers({
+    searches,
+    ...filter
+  }: Partial<PaginationFilter>): Promise<Pagination<User>> {
     const response = await this.apiService.get<Pagination<User>>(this.baseUrl, {
-      params: filter,
+      params: {
+        ...filter,
+        "searches[0].searchBy": searches?.[0]?.searchBy,
+        "searches[0].searchValue": searches?.[0]?.searchValue,
+        "searches[1].searchBy": searches?.[1]?.searchBy,
+        "searches[1].searchValue": searches?.[1]?.searchValue,
+        "searches[2].searchBy": searches?.[2]?.searchBy,
+        "searches[2].searchValue": searches?.[2]?.searchValue,
+      },
     });
     return response.data!;
   }
@@ -75,6 +84,15 @@ class UserService {
       {
         headers: { "Content-Type": "multipart/form-data" },
       }
+    );
+    return response.data!;
+  }
+
+  // Change user roles
+  async changeUserRoles(userId: string, roles: string[]): Promise<boolean> {
+    const response = await this.apiService.patch<boolean>(
+      `${this.baseUrl}/${userId}/roles`,
+      { roles }
     );
     return response.data!;
   }

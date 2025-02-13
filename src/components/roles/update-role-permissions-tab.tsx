@@ -1,25 +1,49 @@
-import { Role } from "@/types/role.type";
-import { Permission } from "@/types/permission.type";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ChevronRight, ChevronDown, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import functionService from "@/services/function.service";
+import { FunctionType } from "@/types/function.type";
+import {
+  AlertTriangle,
+  ChevronDown,
+  ChevronRight,
+  LucideLoader,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface IUpdateRolePermissionsTabProps {
-  selectedRole: Role | null;
+  roleFunctions: FunctionType[];
 }
 
 export function UpdateRolePermissionsTab({
-  selectedRole,
+  roleFunctions,
 }: IUpdateRolePermissionsTabProps) {
-  const { toast } = useToast();
+  const [functions, setFunctions] = useState<FunctionType[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>(
-    selectedRole?.permissions.map((p) => p.id) || []
+    roleFunctions.map((r) => r.id)
   );
+
+  useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+      try {
+        const items = await functionService.getFunctions();
+        setFunctions(items);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
+
+  const { toast } = useToast();
+
   const [expandedNodes, setExpandedNodes] = useState<string[]>([]);
 
   const toggleNode = (id: string) => {
@@ -28,19 +52,22 @@ export function UpdateRolePermissionsTab({
     );
   };
 
-  const handlePermissionChange = (permission: Permission, checked: boolean) => {
+  const handlePermissionChange = (
+    permission: FunctionType,
+    checked: boolean
+  ) => {
     let newPermissions = [...selectedPermissions];
 
     if (checked) {
       // Add the permission and all its children
-      const addChildPermissions = (perm: Permission) => {
+      const addChildPermissions = (perm: FunctionType) => {
         newPermissions.push(perm.id);
         perm.children?.forEach(addChildPermissions);
       };
       addChildPermissions(permission);
     } else {
       // Remove the permission and all its children
-      const removeChildPermissions = (perm: Permission) => {
+      const removeChildPermissions = (perm: FunctionType) => {
         newPermissions = newPermissions.filter((id) => id !== perm.id);
         perm.children?.forEach(removeChildPermissions);
       };
@@ -50,8 +77,12 @@ export function UpdateRolePermissionsTab({
     setSelectedPermissions([...new Set(newPermissions)]);
   };
 
-  const renderPermissionItem = (permission: Permission, indent: number = 0) => {
-    const isChecked = selectedPermissions.includes(permission.id);
+  const renderPermissionItem = (
+    permissions: string[],
+    permission: FunctionType,
+    indent: number = 0
+  ) => {
+    const isChecked = permissions.includes(permission.id);
     const hasChildren = permission.children && permission.children.length > 0;
     const isExpanded = expandedNodes.includes(permission.id);
 
@@ -92,7 +123,11 @@ export function UpdateRolePermissionsTab({
         {hasChildren && isExpanded && (
           <div className="mt-1">
             {permission.children?.map((child) =>
-              renderPermissionItem(child, indent + 1)
+              renderPermissionItem(
+                permission.children.map((c) => c.id),
+                child,
+                indent + 1
+              )
             )}
           </div>
         )}
@@ -102,19 +137,22 @@ export function UpdateRolePermissionsTab({
 
   const handleSubmit = () => {
     // Handle permissions update
-    console.log(selectedPermissions);
     toast({
       title: "Success",
       description: "Permissions updated successfully",
     });
   };
 
-  return (
+  return isLoading ? (
+    <div className="w-full flex items-center justify-center">
+      <LucideLoader className="animate-spin m-8" />
+    </div>
+  ) : (
     <div className="space-y-4">
       <Card className="p-4">
         <ScrollArea className="h-[400px] pr-4">
-          {selectedRole?.permissions.map((permission) =>
-            renderPermissionItem(permission)
+          {functions.map((roleFunction) =>
+            renderPermissionItem(selectedPermissions, roleFunction)
           )}
         </ScrollArea>
       </Card>

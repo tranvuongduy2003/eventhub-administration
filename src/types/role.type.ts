@@ -1,10 +1,9 @@
 import { Permission } from "./permission.type";
 
 export interface Role {
-  id: number;
+  id: string;
   name: string;
-  displayName: string;
   description: string;
-  creationTime: string;
+  createdAt: string;
   permissions: Permission[];
 }

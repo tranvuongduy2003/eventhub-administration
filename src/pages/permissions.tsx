@@ -106,13 +106,6 @@ const permissionsTree: Permission[] = [
 ];
 
 export default function PermissionsPage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [permissions, setPermissions] = useState<Permission[]>([]);
-
-  useEffect(() => {
-    setPermissions(permissionsTree);
-  }, []);
-
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-6 space-y-0">
@@ -124,23 +117,7 @@ export default function PermissionsPage() {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center pb-4 space-x-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search permissions..."
-              className="pl-8"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <Button variant="outline">
-            <Search className="w-4 h-4 mr-2" />
-            Search
-          </Button>
-        </div>
-
-        <PermissionsTable permissions={permissions} />
+        <PermissionsTable />
       </CardContent>
     </Card>
   );

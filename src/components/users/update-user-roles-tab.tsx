@@ -9,46 +9,15 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
+import roleService from "@/services/role.service";
+import userService from "@/services/user.service";
+import { Role } from "@/types/role.type";
 import { User } from "@/types/user.type";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { Loader2, LucideLoader } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
-const mockRoles: Role[] = [
-  {
-    id: "1",
-    name: "ADMIN",
-    displayName: "Administrator",
-    description: "Full system access and management capabilities",
-  },
-  {
-    id: "2",
-    name: "USER",
-    displayName: "User",
-    description: "Standard user access",
-  },
-  {
-    id: "3",
-    name: "MODERATOR",
-    displayName: "Moderator",
-    description: "Content moderation capabilities",
-  },
-  {
-    id: "4",
-    name: "EVENT_MANAGER",
-    displayName: "Event Manager",
-    description: "Can create and manage events",
-  },
-];
-
-interface Role {
-  id: string;
-  name: string;
-  displayName: string;
-  description?: string;
-}
 
 const roleFormSchema = z.object({
   roles: z.array(z.string()).min(1, "At least one role must be selected"),
@@ -64,10 +33,24 @@ export function UpdateUserRolesTab({ user }: UpdateUserRolesTabProps) {
   const { toast } = useToast();
   const [roles, setRoles] = useState<Role[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isRoleLoading, setIsRoleLoading] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
-    setRoles(mockRoles);
+    (async () => {
+      setIsRoleLoading(true);
+      try {
+        const { items } = await roleService.getPaginatedRoles({
+          page: 1,
+          size: 20,
+        });
+        setRoles(items);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsRoleLoading(false);
+      }
+    })();
   }, []);
 
   const form = useForm<RoleFormValues>({
@@ -80,14 +63,7 @@ export function UpdateUserRolesTab({ user }: UpdateUserRolesTabProps) {
   const onSubmit = async (data: RoleFormValues) => {
     try {
       setIsLoading(true);
-      // TODO: Replace with actual API call
-      await fetch(`/api/users/${user.id}/roles`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      await userService.changeUserRoles(user.id, data.roles);
 
       toast({
         title: "Success",
@@ -116,71 +92,79 @@ export function UpdateUserRolesTab({ user }: UpdateUserRolesTabProps) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
-              <FormField
-                control={form.control}
-                name="roles"
-                render={() => (
-                  <FormItem>
-                    {roles.map((role) => (
-                      <FormField
-                        key={role.id}
-                        control={form.control}
-                        name="roles"
-                        render={({ field }) => {
-                          return (
-                            <FormItem
-                              key={role.id}
-                              className="flex flex-row items-start space-x-3 space-y-0 p-2 rounded-lg hover:bg-muted/50 transition-colors"
-                            >
-                              <FormControl>
-                                <Checkbox
-                                  checked={field.value?.includes(role.id)}
-                                  onCheckedChange={(checked) => {
-                                    const newValue = checked
-                                      ? [...field.value, role.id]
-                                      : field.value?.filter(
-                                          (value) => value !== role.id
-                                        );
-                                    field.onChange(newValue);
-                                    setHasChanges(true);
-                                  }}
-                                />
-                              </FormControl>
-                              <div className="space-y-1 leading-none flex-1">
-                                <FormLabel className="text-base">
-                                  {role.displayName}
-                                </FormLabel>
-                                {role.description && (
-                                  <p className="text-sm text-muted-foreground">
-                                    {role.description}
-                                  </p>
-                                )}
-                              </div>
-                            </FormItem>
-                          );
-                        }}
-                      />
-                    ))}
-                  </FormItem>
-                )}
-              />
-            </div>
+        {isRoleLoading ? (
+          <div className="w-full flex items-center justify-center">
+            <LucideLoader className="animate-spin m-8" />
+          </div>
+        ) : (
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+                <FormField
+                  control={form.control}
+                  name="roles"
+                  render={() => (
+                    <FormItem>
+                      {roles.map((role) => (
+                        <FormField
+                          key={role.name}
+                          control={form.control}
+                          name="roles"
+                          render={({ field }) => {
+                            return (
+                              <FormItem
+                                key={role.name}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-2 rounded-lg hover:bg-muted/50 transition-colors"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(role.name)}
+                                    onCheckedChange={(checked) => {
+                                      const newValue = checked
+                                        ? [...field.value, role.name]
+                                        : field.value?.filter(
+                                            (value) => value !== role.name
+                                          );
+                                      field.onChange(newValue);
+                                      setHasChanges(true);
+                                    }}
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none flex-1">
+                                  <FormLabel className="text-base capitalize">
+                                    {role.name.toLowerCase()}
+                                  </FormLabel>
+                                  {role.description && (
+                                    <p className="text-sm text-muted-foreground">
+                                      {role.description}
+                                    </p>
+                                  )}
+                                </div>
+                              </FormItem>
+                            );
+                          }}
+                        />
+                      ))}
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-            <div className="flex justify-end space-x-4 pt-4 border-t">
-              <Button
-                type="submit"
-                disabled={!hasChanges || isLoading}
-                className="min-w-[120px]"
-              >
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save
-              </Button>
-            </div>
-          </form>
-        </Form>
+              <div className="flex justify-end space-x-4 pt-4 border-t">
+                <Button
+                  type="submit"
+                  disabled={!hasChanges || isLoading}
+                  className="min-w-[120px]"
+                >
+                  {isLoading && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  Save
+                </Button>
+              </div>
+            </form>
+          </Form>
+        )}
       </CardContent>
     </Card>
   );
